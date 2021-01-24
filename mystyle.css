@@ -1,0 +1,47 @@
+GtkWindow {
+    background-color: magenta;
+}
+
+GtkButton {
+    background-image: none;
+}
+
+#myGrid {
+    background: #0088ff;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+}
+
+#myChildTop {
+    background-color: white;
+}
+
+#folder{
+    background: #fcfcfc;
+    color: #536363;
+    font-family: DejaVu Sans;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 13px;
+    border-radius: 2px;
+
+}
+
+#plik{
+  background: #f0f0f0;
+  color: #3d3d3c;
+  font-family: Courier New;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 13px;
+  border-radius: 2px;
+
+}
+
+#folder:hover,
+#plik:hover{
+  background: #158b8f;
+  color: #f6f2fa;
+
+}
