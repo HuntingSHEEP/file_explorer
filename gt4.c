@@ -3,8 +3,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include "dis1.h"
-
-//komenda do kompilacji kodu: gcc gt.c -o frontend `pkg-config --cflags --libs gtk+-3.0` && ./frontend
+//komenda do kompilacji kodu: gcc gt4.c -o frontend `pkg-config --cflags --libs gtk+-3.0` && ./frontend
 
 void wymaluj_mie_guziki();
 void wymaluj_mie_frontend();
@@ -31,7 +30,6 @@ char typy_przyciskow[8][12]= {"plik", "folder"};
 
 
 void aktualizuj_komendy_oraz_wykonaj(){
-  //////////////////////////////////////////
   memset(wykonac, 0, sizeof(wykonac));
   strcpy(wykonac, komenda[flaga_KATALOG_lub_PLIK]);
 
@@ -40,6 +38,7 @@ void aktualizuj_komendy_oraz_wykonaj(){
 
   //aktualizuję komendy
   for(int i=0; i<glebokosc; i++){
+      //TODO: zrobić realokację dla wykonac oraz wykon2
     strcat(wykonac, sciezka[i]);
     strcat(wykonac, "/");
 
@@ -76,6 +75,7 @@ void zrob_cos(GtkWidget *przycisk, gpointer data){
     strcpy(wykonac, komenda[flaga_KATALOG_lub_PLIK]);
 
     for(int i=0; i<glebokosc; i++){
+        //TODO: zrobić realokację dla wykonac
       strcat(wykonac, sciezka[i]);
       strcat(wykonac, "/");
     }
