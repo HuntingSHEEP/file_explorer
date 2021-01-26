@@ -14,11 +14,27 @@ char lewy_panel2[5][10] = {"home", "$USER", ".local", "share", "Trash"};
 char lewy_panel1_1[6][20] = {"Pulpit", "Dokumenty", "Pobrane", "Muzyka", "Obrazy", "Wideo"};
 char komenda[2][24] = {"ls -l /", "xdg-open /"};
 char sciezka[64][2035] = {""};
-int glebokosc = 0;
-char wykonac[2048] = "ls -l /";
 
-char wykon_dane[20] = "ls  /";
-char wykon2[2048] = "ls  /"; //wartość domyślna potrzebna na starcie
+int glebokosc = 0;
+char *wykonac = NULL;
+int rozmiarWykonac = 8;
+
+char *wykon2 = NULL;
+char wykon_dane[10] = "ls  /";
+
+void initialize(){
+    wykonac = malloc(sizeof(char)*rozmiarWykonac);
+    strcpy(wykonac, komenda[0]);
+
+    wykon2 = malloc(sizeof(char)*rozmiarWykonac);
+    strcpy(wykon2, wykon_dane);
+}
+
+void freeMemory(){
+    free(wykonac);
+    free(wykon2);
+}
+
 
 char etykieta_WSZYSTKIE[2][50] = {"TYLKO GŁÓWNE PLIKI","WYŚWIETL UKRYTE"};
 int flagaNIE_WSZYSTKIE = 1;

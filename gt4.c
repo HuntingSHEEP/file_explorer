@@ -30,20 +30,26 @@ char typy_przyciskow[8][12]= {"plik", "folder"};
 
 
 void aktualizuj_komendy_oraz_wykonaj(){
-  memset(wykonac, 0, sizeof(wykonac));
   strcpy(wykonac, komenda[flaga_KATALOG_lub_PLIK]);
-
-  memset(wykon2, 0, sizeof(wykon2));
   strcpy(wykon2, wykon_dane);
+  int currWykonac = strlen(wykonac);
 
   //aktualizuję komendy
   for(int i=0; i<glebokosc; i++){
-      //TODO: zrobić realokację dla wykonac oraz wykon2
-    strcat(wykonac, sciezka[i]);
-    strcat(wykonac, "/");
 
-    strcat(wykon2, sciezka[i]);
-    strcat(wykon2, "/");
+    if (rozmiarWykonac > currWykonac + strlen(sciezka[i]) + 1){
+        strcat(wykonac, sciezka[i]);
+        strcat(wykonac, "/");
+
+        strcat(wykon2, sciezka[i]);
+        strcat(wykon2, "/");
+        currWykonac += strlen(sciezka[i]);
+    }else{
+        rozmiarWykonac += 8;
+        wykonac = (char *) realloc(wykonac, sizeof(char)*rozmiarWykonac);
+        wykon2 = (char *) realloc(wykon2, sizeof(char)*rozmiarWykonac);
+        i--;
+    }
   }
 
   // usuwam siatkę wraz z zawartością z okna
@@ -62,23 +68,32 @@ void aktualizuj_komendy_oraz_wykonaj(){
 
 
 void zrob_cos(GtkWidget *przycisk, gpointer data){
-  //odnotowuję numer przycisku, który się głosił
+  //odnotowuję numer przycisku, który się zgłosił
   int number = (int)data;
   g_print("%d A JA WIEM\n",number);
 
   if (typy[number]=='-'){
     flaga_KATALOG_lub_PLIK = 1;
-
     strcpy(sciezka[glebokosc], nazwy[number]);
     glebokosc++;
-    memset(wykonac, 0, sizeof(wykonac));
     strcpy(wykonac, komenda[flaga_KATALOG_lub_PLIK]);
 
-    for(int i=0; i<glebokosc; i++){
-        //TODO: zrobić realokację dla wykonac
-      strcat(wykonac, sciezka[i]);
-      strcat(wykonac, "/");
-    }
+    int currWykonac = strlen(wykonac);
+
+      for(int i=0; i<glebokosc; i++){
+          if (rozmiarWykonac > currWykonac + strlen(sciezka[i]) + 1){
+              strcat(wykonac, sciezka[i]);
+              strcat(wykonac, "/");
+
+              currWykonac += strlen(sciezka[i]);
+          }else{
+              rozmiarWykonac += 8;
+              wykonac = (char *) realloc(wykonac, sizeof(char)*rozmiarWykonac);
+              wykon2 = (char *) realloc(wykon2, sizeof(char)*rozmiarWykonac);
+              i--;
+          }
+      }
+
     glebokosc--;
     memset(sciezka[glebokosc], 0, sizeof(sciezka[0]));
     flaga_KATALOG_lub_PLIK = 0;
@@ -157,7 +172,9 @@ void zrob_cos(GtkWidget *przycisk, gpointer data){
   }else if((typy[number]=='d') || (typy[number]=='l') ){
     flaga_KATALOG_lub_PLIK = 0;
     strcpy(sciezka[glebokosc], nazwy[number]);
+
     glebokosc++;
+    g_print("przejdz do aktualizacji");
     aktualizuj_komendy_oraz_wykonaj();
   }
   g_print(" %s\n", wykonac);
@@ -168,6 +185,7 @@ void zrob_cos(GtkWidget *przycisk, gpointer data){
 
 
 int main(int argc, char **argv){
+    initialize();
   //ta linijka jest potrzebna, by gtk ruszyło
   gtk_init(&argc, &argv);
   myCSS();
@@ -187,6 +205,7 @@ int main(int argc, char **argv){
   //uruchomienie głównej pętli GTK obsługującej sygnały
   gtk_main();
 
+  freeMemory();
   return 0;
 }
 
