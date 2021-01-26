@@ -2,13 +2,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-FILE *fp, *fp2;
 char path[2035];
 char path2[2035];
 char name[2035];
 char nazwy[512][2035];
-char typy[512];
 char sciezka[64][2035] = {""};
+
+//////////////////////////////////////////////////////////////
+FILE *fp, *fp2;
+char typy[512];
 
 int lp;
 char lewy_panel1[2][5] = {"home", "$USER"};
@@ -22,6 +24,9 @@ int rozmiarWykonac = 8;
 
 char *wykon2 = NULL;
 char wykon_dane[10] = "ls  /";
+
+int flagaNIE_WSZYSTKIE = 1;
+int flaga_KATALOG_lub_PLIK = 0;
 
 void initialize(){
     wykonac = malloc(sizeof(char)*rozmiarWykonac);
@@ -37,10 +42,6 @@ void freeMemory(){
 }
 
 
-char etykieta_WSZYSTKIE[2][50] = {"TYLKO GŁÓWNE PLIKI","WYŚWIETL UKRYTE"};
-int flagaNIE_WSZYSTKIE = 1;
-
-int flaga_KATALOG_lub_PLIK = 0;
 
 void aktualizuj_dane_lokalizacji(){
   /* zerowanie list nazwy i typy */

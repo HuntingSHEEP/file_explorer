@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <gtk/gtk.h>
-#include "dis1.h"
+#include "dis2.h"
 //komenda do kompilacji kodu: gcc gt4.c -o frontend `pkg-config --cflags --libs gtk+-3.0` && ./frontend
 
 void wymaluj_mie_guziki();
@@ -16,7 +16,27 @@ int imax(int a, int b){
     return b;
 }
 
-GtkWidget *guziki[520];
+int buttonsAmount;
+
+GtkWidget **guziki;
+
+void buttonInit(){
+    buttonsAmount = lp;
+    guziki = (GtkWidget **) malloc(sizeof(GtkWidget *)*buttonsAmount);
+}
+
+void buttonRealloc(){
+    if (lp > buttonsAmount){
+        buttonsAmount = lp + 5;
+        guziki = (GtkWidget **) realloc(guziki, sizeof(GtkWidget *)*buttonsAmount);
+    }
+}
+
+void buttonFree(){
+    free(guziki);
+}
+
+//GtkWidget *guziki[5200];
 GtkWidget *powrot, *pokaz_wszystkie;
 GtkWidget *window, *ggrid, *grid, *label, *label1, *button1, *button2;
 
@@ -46,6 +66,7 @@ void aktualizuj_komendy_oraz_wykonaj(){
         currWykonac += strlen(sciezka[i]);
     }else{
         rozmiarWykonac += 8;
+        //TODO: czy trzeba robić realokację przez zmienną tymczasową?
         wykonac = (char *) realloc(wykonac, sizeof(char)*rozmiarWykonac);
         wykon2 = (char *) realloc(wykon2, sizeof(char)*rozmiarWykonac);
         i--;
@@ -186,6 +207,7 @@ void zrob_cos(GtkWidget *przycisk, gpointer data){
 
 int main(int argc, char **argv){
     initialize();
+    buttonInit();
   //ta linijka jest potrzebna, by gtk ruszyło
   gtk_init(&argc, &argv);
   myCSS();
@@ -342,6 +364,7 @@ void wymaluj_mie_frontend(){
 
 void wymaluj_mie_guziki(){
   aktualizuj_dane_lokalizacji();
+  buttonRealloc();
 
   int index_typu = 0;
   int index_przycisku = 0;
@@ -368,7 +391,8 @@ void wymaluj_mie_guziki(){
       //sprintf(numer, " [%c]", typy[i]);
       //strcat(dest, numer);
 
-      guziki[index_przycisku] = gtk_button_new_with_label(dest);
+      (*(guziki + index_przycisku)) = gtk_button_new_with_label(dest);
+
       g_signal_connect(guziki[index_przycisku], "clicked", G_CALLBACK(zrob_cos), (gpointer) i);
       gtk_widget_set_name(guziki[index_przycisku], typy_przyciskow[index_typu]);
       index_przycisku++;
