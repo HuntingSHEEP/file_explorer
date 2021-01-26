@@ -8,12 +8,13 @@ char path2[2035];
 char name[2035];
 char nazwy[512][2035];
 char typy[512];
+char sciezka[64][2035] = {""};
+
 int lp;
 char lewy_panel1[2][5] = {"home", "$USER"};
 char lewy_panel2[5][10] = {"home", "$USER", ".local", "share", "Trash"};
 char lewy_panel1_1[6][20] = {"Pulpit", "Dokumenty", "Pobrane", "Muzyka", "Obrazy", "Wideo"};
 char komenda[2][24] = {"ls -l /", "xdg-open /"};
-char sciezka[64][2035] = {""};
 
 int glebokosc = 0;
 char *wykonac = NULL;
