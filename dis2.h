@@ -2,18 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 
-char path[2035];
-char path2[2035];
-char name[2035];
-//char nazwy[5512][2035];
-//char typy[5512];
 
 char sciezka[64][2035] = {""}; //domyślnie są tu katalogi, więc nie przechowuję danych o rodzaju elementu
+//////////////////////////////////////////////////////////////
 
 int maxAmountOfFiles = 64;
 char *typy;
 char **nazwy = NULL;
-//////////////////////////////////////////////////////////////
+
 FILE *fp, *fp2;
 
 char oneCharacter;
@@ -87,18 +83,15 @@ void aktualizuj_dane_lokalizacji(){
         if(oneCharacter == '\n'){
             typeFlag = 1;
         }
-
         oneCharacter = (char) getc(fp);
     }
-
 
     lp = 0;
     int maxSizeOfWord = 32;
     int sizeOfWord = 0;
     char *word = malloc(sizeof(char)*maxSizeOfWord);
-
-
     oneCharacter = (char) fgetc(fp2);
+
     while (!feof(fp2)){
 
         if (oneCharacter == '\n'){
@@ -113,6 +106,10 @@ void aktualizuj_dane_lokalizacji(){
                 maxSizeOfWord += 16;
                 char *tmp = (char *) realloc(word, sizeof(char)*maxSizeOfWord);
                 word = tmp;
+            }
+            if (oneCharacter == ' '){
+                (*(word + sizeOfWord)) = '\\';
+                sizeOfWord++;
             }
 
             (*(word + sizeOfWord)) = oneCharacter;
