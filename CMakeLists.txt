@@ -4,7 +4,6 @@ project(file_explorer C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(file_explorer
-        dis1.h
         gt4.c)
 
 find_package(PkgConfig REQUIRED)
