@@ -3,8 +3,7 @@
 #include <string.h>
 
 
-char sciezka[64][2035] = {""}; //domyślnie są tu katalogi, więc nie przechowuję danych o rodzaju elementu
-//////////////////////////////////////////////////////////////
+char **sciezka;
 
 int maxAmountOfFiles = 64;
 char *typy;
@@ -19,6 +18,7 @@ char lewy_panel2[5][10] = {"home", "$USER", ".local", "share", "Trash"};
 char lewy_panel1_1[6][20] = {"Pulpit", "Dokumenty", "Pobrane", "Muzyka", "Obrazy", "Wideo"};
 char komenda[2][24] = {"ls -l /", "xdg-open /"};
 
+int maxDepth = 1;
 int glebokosc = 0;
 char *wykonac = NULL;
 int rozmiarWykonac = 8;
@@ -40,6 +40,7 @@ void initialize(){
 
     typy = malloc(sizeof(char)*maxAmountOfFiles);
     nazwy = (char **) malloc(sizeof(char *)*maxAmountOfFiles);
+    sciezka = (char **) malloc(sizeof(char *) * maxDepth);
 }
 
 void freeMemory(){
@@ -48,6 +49,7 @@ void freeMemory(){
     //free(oneCharacter);
     free(typy);
     free(nazwy);
+    free(sciezka);
 }
 
 

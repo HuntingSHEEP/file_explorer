@@ -3,7 +3,7 @@
 #include <string.h>
 #include <gtk/gtk.h>
 #include "dis2.h"
-//komenda do kompilacji kodu: gcc gt4.c -o frontend `pkg-config --cflags --libs gtk+-3.0` && ./frontend
+//komenda do kompilacji kodu: gcc gt4.c -o SheepVIEW `pkg-config --cflags --libs gtk+-3.0` && ./SheepVIEW
 
 void wymaluj_mie_guziki();
 void wymaluj_mie_frontend();
@@ -95,14 +95,25 @@ void zrob_cos(GtkWidget *przycisk, gpointer data){
 
   if (typy[number]=='-'){
     flaga_KATALOG_lub_PLIK = 1;
-    strcpy(sciezka[glebokosc], nazwy[number]);
+    //strcpy(sciezka[glebokosc], nazwy[number]);
+
+      if (glebokosc + 2 > maxDepth){
+          maxDepth += 1;
+          sciezka = (char **) realloc(sciezka, sizeof(char *) * maxDepth);
+      }
+
+      char *tmpName = malloc(sizeof(char) * strlen(nazwy[number]));
+      strcpy(tmpName, nazwy[number]);
+      sciezka[glebokosc] = tmpName;
+
+
     glebokosc++;
     strcpy(wykonac, komenda[flaga_KATALOG_lub_PLIK]);
 
     int currWykonac = strlen(wykonac);
 
       for(int i=0; i<glebokosc; i++){
-          if (rozmiarWykonac > currWykonac + strlen(sciezka[i]) + 1){
+          if (rozmiarWykonac > currWykonac + strlen(sciezka[i]) + 5){
               strcat(wykonac, sciezka[i]);
               strcat(wykonac, "/");
 
@@ -116,8 +127,11 @@ void zrob_cos(GtkWidget *przycisk, gpointer data){
       }
 
     glebokosc--;
-    memset(sciezka[glebokosc], 0, sizeof(sciezka[0]));
+    //memset(sciezka[glebokosc], 0, sizeof(sciezka[0]));
+    sciezka[glebokosc] = "";
     flaga_KATALOG_lub_PLIK = 0;
+    //TODO: CHYBA TUTAJ MIAŁEM DZIWNY BŁĄÐ, KTÓRY NIE ZAWSZE WYSTĘPOWAŁ >> ALOKACJA? [corrupted size vs prev_size zrzut pamięci]
+    printf("\nUWAGA, BĘDĘ OTWIERAŁ: [%s]\n\n\n", wykonac);
     fp = popen(wykonac, "r");
 
   }else if((-18<=number) && (number<=-11)){
@@ -126,20 +140,54 @@ void zrob_cos(GtkWidget *przycisk, gpointer data){
 
     if (number == 0){
       for(int i=0; i<glebokosc; i++){
-        memset(sciezka[i], 0, sizeof(sciezka[0]));
-        if (i<2)
-          strcpy(sciezka[i], lewy_panel1[i]);
+        //memset(sciezka[i], 0, sizeof(sciezka[0]));
+        sciezka[i] = "";
+        if (i<2){
+
+          //strcpy(sciezka[i], lewy_panel1[i]);
+            if (glebokosc + 2 > maxDepth){
+                maxDepth += 1;
+                sciezka = (char **) realloc(sciezka, sizeof(char *) * maxDepth);
+            }
+
+            char *tmpName = malloc(sizeof(char) * strlen(lewy_panel1[i]));
+            strcpy(tmpName, lewy_panel1[i]);
+            sciezka[i] = tmpName;
+
+        }
+
         }
       glebokosc = 2;
     }
 
     if ((0<number) && (number<7)){
+
       for(int i=0; i<glebokosc; i++){
-        memset(sciezka[i], 0, sizeof(sciezka[0]));
-        if (i<2)
-          strcpy(sciezka[i], lewy_panel1[i]);
-        if (i==2)
-          strcpy(sciezka[i], lewy_panel1_1[number-1]);
+        //memset(sciezka[i], 0, sizeof(sciezka[0]));
+        sciezka[i] = "";
+
+        if (i<2){
+          //strcpy(sciezka[i], lewy_panel1[i]);
+            if (glebokosc + 2 > maxDepth){
+                maxDepth += 1;
+                sciezka = (char **) realloc(sciezka, sizeof(char *) * maxDepth);
+            }
+            char *tmpName = malloc(sizeof(char) * strlen(lewy_panel1[i]));
+            strcpy(tmpName, lewy_panel1[i]);
+            sciezka[i] = tmpName;
+
+
+        }
+        if (i==2){
+          //strcpy(sciezka[i], lewy_panel1_1[number-1]);
+            if (glebokosc + 2 > maxDepth){
+                maxDepth += 1;
+                sciezka = (char **) realloc(sciezka, sizeof(char *) * maxDepth);
+            }
+          char *tmpName = malloc(sizeof(char) * strlen(lewy_panel1_1[number-1]));
+          strcpy(tmpName, lewy_panel1_1[number-1]);
+          sciezka[i] = tmpName;
+        }
         }
       glebokosc = 3;
     }
@@ -148,9 +196,21 @@ void zrob_cos(GtkWidget *przycisk, gpointer data){
       glebokosc = imax(glebokosc, 5);
 
       for(int i=0; i<glebokosc; i++){
-        memset(sciezka[i], 0, sizeof(sciezka[0]));
-        if (i<5)
-          strcpy(sciezka[i], lewy_panel2[i]);
+        //memset(sciezka[i], 0, sizeof(sciezka[0]));
+        sciezka[i] = "";
+        if (i<5){
+          //strcpy(sciezka[i], lewy_panel2[i]);
+            if (glebokosc + 2 > maxDepth){
+                maxDepth += 1;
+                sciezka = (char **) realloc(sciezka, sizeof(char *) * maxDepth);
+            }
+          char *tmpName = malloc(sizeof(char) * strlen(lewy_panel2[i]));
+          strcpy(tmpName, lewy_panel2[i]);
+          sciezka[i] = tmpName;
+
+        }
+
+
         }
       glebokosc = 5;
     }
@@ -185,14 +245,24 @@ void zrob_cos(GtkWidget *przycisk, gpointer data){
   }else if(number==-2){
     if (glebokosc > 0){
       glebokosc--;
-      memset(sciezka[glebokosc], 0, sizeof(sciezka[0]));
+      //memset(sciezka[glebokosc], 0, sizeof(sciezka[0]));
+      sciezka[glebokosc] = "";
     }
     flaga_KATALOG_lub_PLIK = 0;
     aktualizuj_komendy_oraz_wykonaj();
 
   }else if((typy[number]=='d') || (typy[number]=='l') ){
     flaga_KATALOG_lub_PLIK = 0;
-    strcpy(sciezka[glebokosc], nazwy[number]);
+
+    if (glebokosc + 2 > maxDepth){
+        maxDepth += 1;
+        sciezka = (char **) realloc(sciezka, sizeof(char *) * maxDepth);
+    }
+
+    char *tmpName = malloc(sizeof(char) * strlen(nazwy[number]));
+    strcpy(tmpName, nazwy[number]);
+    sciezka[glebokosc] = tmpName;
+
 
     glebokosc++;
     g_print("przejdz do aktualizacji");
