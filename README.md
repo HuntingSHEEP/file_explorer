@@ -1,2 +1,2 @@
 # file_explorer
-Simple file explorer build for debian-based linux distros
+Simple file explorer written for debian-based linux distros.
